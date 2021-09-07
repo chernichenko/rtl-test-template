@@ -1,5 +1,5 @@
 import React, { FC, useState, useCallback, useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { Spinner } from '../ui/spinner';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { InputForm } from 'components/ui/inputForm';
 import { Button } from 'modularForm';
+import { changeNewInfo } from 'reducers/profileSlice';
 
 import styles from './User.module.scss';
 
@@ -45,6 +46,7 @@ export const User: FC<IUserProps> = ({
   onSubmit = () => {},
 }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const profile = useSelector(state => state.profile);
 
   const [similarUsers, setSimilarUsers] = useState<any>([]);
@@ -79,6 +81,10 @@ export const User: FC<IUserProps> = ({
 
   const onSubmitHandler = useCallback(values => {
     onSubmit(values);
+  }, []);
+
+  const changeInfoHandler = useCallback(() => {
+    dispatch(changeNewInfo());
   }, []);
 
   if (!id) {
@@ -133,6 +139,8 @@ export const User: FC<IUserProps> = ({
           );
         }}
       </Formik>
+
+      <button onClick={changeInfoHandler}>Change new info</button>
     </div>
   );
 };

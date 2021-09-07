@@ -7,10 +7,10 @@ import { fireEvent, render, screen, act, waitFor } from '@testing-library/react'
 import { Router } from 'react-router';
 import { createMemoryHistory } from 'history';
 
+import { combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import profileSlice from 'reducers/profileSlice';
-import { globalInitialState } from 'reducers/globalInitialState';
 
 import { User } from './User';
 import { mockSimilarUsers } from './mock';
@@ -19,9 +19,8 @@ jest.mock('axios');
 
 const configurateStore = ({ id, paymentUrl }) =>
   configureStore({
-    reducer: profileSlice,
+    reducer: combineReducers({ profile: profileSlice }),
     preloadedState: {
-      ...globalInitialState,
       profile: {
         photo: {
           primary: {
@@ -29,6 +28,8 @@ const configurateStore = ({ id, paymentUrl }) =>
           },
         },
         paymentUrl: paymentUrl,
+        email: 'gnrjhtrgnrlfdgfgdl@gmail.com',
+        newInfo: '',
       },
     },
   });
@@ -215,6 +216,22 @@ describe('User', () => {
         firstName: testFirstName,
         lastName: testLastName,
       });
+    });
+  });
+
+  it('TEST 10: Redux | Should change redux store', async () => {
+    const mockStore = configurateStore({ id: 123, paymentUrl: '/pay' });
+
+    render(
+      <Provider store={mockStore}>
+        <User id={123} />
+      </Provider>,
+    );
+    
+    fireEvent.click(screen.getByText(/Change new info/));
+
+    await waitFor(async () => {
+      await expect(mockStore.getState().profile.newInfo).toEqual('This is new info');
     });
   });
 });
