@@ -227,7 +227,7 @@ describe('User', () => {
         <User id={123} />
       </Provider>,
     );
-    
+
     fireEvent.click(screen.getByText(/Change new info/));
 
     await waitFor(async () => {

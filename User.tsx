@@ -74,18 +74,18 @@ export const User: FC<IUserProps> = ({
     [similarUsers],
   );
 
-  const goBack = useCallback(() => {
+  const goBack = () => {
     history.push('/new/route');
     goBackHandler();
-  }, []);
+  };
 
-  const onSubmitHandler = useCallback(values => {
+  const onSubmitHandler = values => {
     onSubmit(values);
-  }, []);
+  }
 
-  const changeInfoHandler = useCallback(() => {
+  const changeInfoHandler = () => {
     dispatch(changeNewInfo());
-  }, []);
+  }
 
   if (!id) {
     return <Redirect to="/pageNotFound" />;
